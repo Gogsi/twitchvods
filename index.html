@@ -1,0 +1,39 @@
+<html>
+
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha1.js"></script>
+<script>
+function genLink(){
+	var form = document.getElementById("frm1");
+	
+	var username = form.name.value
+	var timestamp = parseInt((new Date(form.time.value + 'Z').getTime() / 1000).toFixed(0));
+	var vod = form.id.value
+	
+	var data = username + "_" + vod + "_" + timestamp;
+	
+	var hash = CryptoJS.SHA1(data).toString().substring(0,20)
+
+	var resultData = hash + "_" + data
+	
+	document.getElementById('result').innerHTML = "https://vod-secure.twitch.tv/" + resultData + "/chunked/index-dvr.m3u8";
+}
+
+</script>
+
+</head>
+
+<body>
+
+<form id="frm1" action="/action_page.php">
+  Streamer username: <input type="text" name="name"><br>
+  Start time of VOD (UTC): <input type="datetime-local" name="time" value="2020-04-20T08:30:00" step=1><br>
+  VOD ID - from https://twitch.tv/videos/(ID): <input type="text" name="id"><br><br>
+  <input type="button" onclick="genLink()" value="Submit">
+</form>
+
+<div id='result'>Result: </div>
+
+</body>
+
+</html>
